@@ -13,7 +13,7 @@
 	<artifactId>money-api</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>money-api</name>
-	<description>Demo project for Spring Boot</description>
+	<description>Api de para o ap uni-money</description>
 
 	<properties>
 		<java.version>1.8</java.version>
@@ -50,8 +50,11 @@
 			<artifactId>postgresql</artifactId>
 			<scope>runtime</scope>
 		</dependency>
+		<dependency>
+			<groupId>org.flywaydb</groupId>
+			<artifactId>flyway-core</artifactId>
+		</dependency>
 	</dependencies>
-
 	<build>
 		<plugins>
 			<plugin>
