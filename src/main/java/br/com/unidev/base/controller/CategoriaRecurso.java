@@ -32,7 +32,7 @@ public class CategoriaRecurso {
 	}
 
 	@PostMapping
-	public ResponseEntity<Categoria> salvar(@RequestBody Categoria categoria) {
+	public ResponseEntity<Categoria> salvar(@Valid @RequestBody Categoria categoria) {
 		Categoria categoriaSalva = repository.save(categoria);
 		URI uri = ServletUriComponentsBuilder.fromCurrentRequestUri().path("/{codigo}")
 				.buildAndExpand(categoriaSalva.getCodigo()).toUri();
