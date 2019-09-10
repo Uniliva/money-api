@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -12,13 +13,14 @@ import org.springframework.validation.FieldError;
 import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
+import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
 import br.com.unidev.base.config.Messages;
 
 @ControllerAdvice
-public class ExceptionHandler extends ResponseEntityExceptionHandler {
+public class ExceptionCustomHandler extends ResponseEntityExceptionHandler {
 
 	@Autowired
 	private Messages msg;
@@ -55,5 +57,18 @@ public class ExceptionHandler extends ResponseEntityExceptionHandler {
 
 		return handleExceptionInternal(ex, erro, headers, status, request);
 	}
+	
+	@ExceptionHandler({EmptyResultDataAccessException.class})
+	protected ResponseEntity<Object> handleEmptyResultDataAccessException(EmptyResultDataAccessException ex, WebRequest request) {	
+		
+		String msgUsuario = msg.getMessage("recurso.nao.encontrado");
+		String msgDev = ex.toString();
+
+		Erro erro = new Erro(msgUsuario, msgDev, null);
+
+		return handleExceptionInternal(ex, erro, new HttpHeaders(), HttpStatus.NOT_FOUND, request);
+	}
+	
+	
 
 }
