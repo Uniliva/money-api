@@ -2,9 +2,11 @@ package br.com.unidev.base.model;
 
 import javax.persistence.Embeddable;
 
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
-@Data
+@Getter
+@Setter
 @Embeddable
 public class Endereco {
 

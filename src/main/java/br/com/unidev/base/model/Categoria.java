@@ -8,11 +8,15 @@ import javax.persistence.Table;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Size;
 
-import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.Setter;
 
 @Entity
 @Table(name = "categoria")
-@Data
+@Getter
+@Setter
+@EqualsAndHashCode(of = "codigo")
 public class Categoria {
 	
 	@Id
