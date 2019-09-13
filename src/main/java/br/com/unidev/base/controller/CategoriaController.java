@@ -48,7 +48,7 @@ public class CategoriaController {
 
 	@GetMapping("/{codigo}")
 	public ResponseEntity<Categoria> buscaPorCodigo(@PathVariable Integer codigo) {
-		return ResponseEntity.of(service.buscaPorCodigo(codigo));
+		return ResponseEntity.ok(service.buscaPorCodigo(codigo));
 	}
 	
 	@DeleteMapping("/{codigo}")

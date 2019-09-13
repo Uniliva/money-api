@@ -1,7 +1,6 @@
 package br.com.unidev.base.service;
 
 import java.util.List;
-import java.util.Optional;
 
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,9 +24,8 @@ public class CategoriaService {
 		return repo.save(categoria);
 	}
 
-	public Optional<Categoria> buscaPorCodigo(Integer codigo) {
-		Optional<Categoria> categoria = repo.findById(codigo);
-		return categoria;
+	public Categoria buscaPorCodigo(Integer codigo) {
+		return repo.findById(codigo).orElseThrow(() -> new EmptyResultDataAccessException(1));
 	}
 
 	public void remove(Integer codigo) {
@@ -35,7 +33,7 @@ public class CategoriaService {
 	}
 
 	public Categoria atualizar(Integer codigo, Categoria categoria) {
-		Categoria categoriaSalva = repo.findById(codigo).orElseThrow(() -> new EmptyResultDataAccessException(1));
+		Categoria categoriaSalva = this.buscaPorCodigo(codigo);
 		BeanUtils.copyProperties(categoria, categoriaSalva, "codigo");
 		return repo.save(categoriaSalva);
 	}

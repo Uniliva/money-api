@@ -1,7 +1,6 @@
 package br.com.unidev.base.service;
 
 import java.util.List;
-import java.util.Optional;
 
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,9 +24,8 @@ public class PessoaService {
 		return repo.save(pessoa);
 	}
 
-	public Optional<Pessoa> buscaPorCodigo(Integer codigo) {
-		Optional<Pessoa> pessoa = repo.findById(codigo);
-		return pessoa;
+	public Pessoa buscaPorCodigo(Integer codigo) {
+		return repo.findById(codigo).orElseThrow(() -> new EmptyResultDataAccessException(1));
 	}
 
 	public void remove(Integer codigo) {
@@ -35,14 +33,14 @@ public class PessoaService {
 	}
 
 	public Pessoa atualizar(Integer codigo, Pessoa pessoa) {
-		Pessoa pessoaSalva = repo.findById(codigo).orElseThrow(() -> new EmptyResultDataAccessException(1));
+		Pessoa pessoaSalva = this.buscaPorCodigo(codigo);
 		BeanUtils.copyProperties(pessoa, pessoaSalva, "codigo");
 		return repo.save(pessoaSalva);
 	}
 
-	public Pessoa atualizarStatus(Integer codigo, Boolean status) {
-		Pessoa pessoaSalva = repo.findById(codigo).orElseThrow(() -> new EmptyResultDataAccessException(1));
+	public void atualizarStatus(Integer codigo, Boolean status) {
+		Pessoa pessoaSalva = this.buscaPorCodigo(codigo);
 		pessoaSalva.setAtivo(status);
-		return repo.save(pessoaSalva);
+		repo.save(pessoaSalva);
 	}
 }

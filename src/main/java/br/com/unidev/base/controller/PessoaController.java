@@ -48,7 +48,7 @@ public class PessoaController {
 
 	@GetMapping("/{codigo}")
 	public ResponseEntity<Pessoa> buscaPorCodigo(@PathVariable Integer codigo) {
-		return ResponseEntity.of(service.buscaPorCodigo(codigo));
+		return ResponseEntity.ok(service.buscaPorCodigo(codigo));
 	}
 
 	@DeleteMapping("/{codigo}")
@@ -63,8 +63,9 @@ public class PessoaController {
 	}
 	
 	@PutMapping("/{codigo}/ativo")
-	public ResponseEntity<Pessoa> atualizarStatus(@PathVariable Integer codigo, @RequestParam Boolean status) {
-		return ResponseEntity.ok(service.atualizarStatus(codigo, status));
+	@ResponseStatus(code = HttpStatus.NO_CONTENT)
+	public void atualizarStatus(@PathVariable Integer codigo, @RequestParam Boolean status) {
+		service.atualizarStatus(codigo, status);
 	}
 
 }

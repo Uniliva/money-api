@@ -29,8 +29,8 @@ public class ExceptionCustomHandler extends ResponseEntityExceptionHandler {
 	protected ResponseEntity<Object> handleHttpMessageNotReadable(HttpMessageNotReadableException ex,
 			HttpHeaders headers, HttpStatus status, WebRequest request) {
 
-		String msgUsuario = msg.getMessage("mensagem.invalida");
-		String msgDev = ex.getCause().getMessage();
+		String msgUsuario = msg.getMessage("body.invalido");
+		String msgDev = ex.getCause() != null ? ex.getCause().getMessage() : ex.toString();
 
 		Erro erro = new Erro(msgUsuario, msgDev, null);
 
@@ -57,10 +57,11 @@ public class ExceptionCustomHandler extends ResponseEntityExceptionHandler {
 
 		return handleExceptionInternal(ex, erro, headers, status, request);
 	}
-	
-	@ExceptionHandler({EmptyResultDataAccessException.class})
-	protected ResponseEntity<Object> handleEmptyResultDataAccessException(EmptyResultDataAccessException ex, WebRequest request) {	
-		
+
+	@ExceptionHandler({ EmptyResultDataAccessException.class })
+	protected ResponseEntity<Object> handleEmptyResultDataAccessException(EmptyResultDataAccessException ex,
+			WebRequest request) {
+
 		String msgUsuario = msg.getMessage("recurso.nao.encontrado");
 		String msgDev = ex.toString();
 
@@ -68,7 +69,5 @@ public class ExceptionCustomHandler extends ResponseEntityExceptionHandler {
 
 		return handleExceptionInternal(ex, erro, new HttpHeaders(), HttpStatus.NOT_FOUND, request);
 	}
-	
-	
 
 }
