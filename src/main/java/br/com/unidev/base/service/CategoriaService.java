@@ -7,7 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import br.com.unidev.base.config.Messages;
-import br.com.unidev.base.exception.RecursoNaoEncontradoException;
+import br.com.unidev.base.exception.ResourceNotFoundException;
 import br.com.unidev.base.model.Categoria;
 import br.com.unidev.base.repository.CategoriaRepository;
 
@@ -28,15 +28,15 @@ public class CategoriaService {
 		return repo.save(categoria);
 	}
 
-	public Categoria buscaPorCodigo(Integer codigo) throws RecursoNaoEncontradoException{
-		return repo.findById(codigo).orElseThrow(() -> new RecursoNaoEncontradoException(msg.getMessage("recurso.nao.encontrado", "Categoria")));
+	public Categoria buscaPorCodigo(Integer codigo) throws ResourceNotFoundException{
+		return repo.findById(codigo).orElseThrow(() -> new ResourceNotFoundException(msg.getMessage("recurso.nao.encontrado", "Categoria")));
 	}
 
 	public void remove(Integer codigo) {
 		repo.deleteById(codigo);
 	}
 
-	public Categoria atualizar(Integer codigo, Categoria categoria) throws RecursoNaoEncontradoException {
+	public Categoria atualizar(Integer codigo, Categoria categoria) throws ResourceNotFoundException {
 		Categoria categoriaSalva = this.buscaPorCodigo(codigo);
 		BeanUtils.copyProperties(categoria, categoriaSalva, "codigo");
 		return repo.save(categoriaSalva);

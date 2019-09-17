@@ -18,8 +18,8 @@ import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
 import br.com.unidev.base.config.Messages;
-import br.com.unidev.base.exception.RecursoNaoEncontradoException;
-import br.com.unidev.base.exception.RequisicaoInvalidaException;
+import br.com.unidev.base.exception.ResourceNotFoundException;
+import br.com.unidev.base.exception.RequestInvalidException;
 
 @ControllerAdvice
 public class ExceptionCustomHandler extends ResponseEntityExceptionHandler {
@@ -60,8 +60,8 @@ public class ExceptionCustomHandler extends ResponseEntityExceptionHandler {
 		return handleExceptionInternal(ex, erro, headers, status, request);
 	}
 
-	@ExceptionHandler({ RequisicaoInvalidaException.class })
-	protected ResponseEntity<Object> handleRequisicaoInvalidaException(RequisicaoInvalidaException ex,
+	@ExceptionHandler({ RequestInvalidException.class })
+	protected ResponseEntity<Object> handleRequisicaoInvalidaException(RequestInvalidException ex,
 			WebRequest request) {
 
 		String msgUsuario = ex.getMessage();
@@ -72,8 +72,8 @@ public class ExceptionCustomHandler extends ResponseEntityExceptionHandler {
 		return handleExceptionInternal(ex, erro, new HttpHeaders(), HttpStatus.BAD_REQUEST, request);
 	}
 	
-	@ExceptionHandler({ RecursoNaoEncontradoException.class })
-	protected ResponseEntity<Object> handleRecursoNaoEncontradoException(RecursoNaoEncontradoException ex,
+	@ExceptionHandler({ ResourceNotFoundException.class })
+	protected ResponseEntity<Object> handleRecursoNaoEncontradoException(ResourceNotFoundException ex,
 			WebRequest request) {
 
 		String msgUsuario = ex.getMessage();

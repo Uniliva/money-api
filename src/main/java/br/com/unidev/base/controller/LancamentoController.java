@@ -20,8 +20,8 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import br.com.unidev.base.event.RecursoCriadoEvent;
-import br.com.unidev.base.exception.RecursoNaoEncontradoException;
-import br.com.unidev.base.exception.RequisicaoInvalidaException;
+import br.com.unidev.base.exception.ResourceNotFoundException;
+import br.com.unidev.base.exception.RequestInvalidException;
 import br.com.unidev.base.model.Lancamento;
 import br.com.unidev.base.service.LancamentoService;
 
@@ -41,7 +41,7 @@ public class LancamentoController {
 	}
 
 	@PostMapping
-	public ResponseEntity<Lancamento> salvar(@Valid @RequestBody Lancamento lancamento, HttpServletResponse response) throws RequisicaoInvalidaException {
+	public ResponseEntity<Lancamento> salvar(@Valid @RequestBody Lancamento lancamento, HttpServletResponse response) throws RequestInvalidException {
 
 		Lancamento LancamentoSalva = service.salvar(lancamento);
 		publisher.publishEvent(new RecursoCriadoEvent(this, response, LancamentoSalva.getCodigo()));
@@ -49,7 +49,7 @@ public class LancamentoController {
 	}
 
 	@GetMapping("/{codigo}")
-	public ResponseEntity<Lancamento> buscaPorCodigo(@PathVariable Integer codigo) throws RecursoNaoEncontradoException {
+	public ResponseEntity<Lancamento> buscaPorCodigo(@PathVariable Integer codigo) throws ResourceNotFoundException {
 		return ResponseEntity.ok(service.buscaPorCodigo(codigo));
 	}
 
@@ -61,7 +61,7 @@ public class LancamentoController {
 
 	@PutMapping("/{codigo}")
 	public ResponseEntity<Lancamento> atualizar(@PathVariable Integer codigo,
-			@Valid @RequestBody Lancamento lancamento) throws RecursoNaoEncontradoException {
+			@Valid @RequestBody Lancamento lancamento) throws ResourceNotFoundException {
 		return ResponseEntity.ok(service.atualizar(codigo, lancamento));
 	}
 

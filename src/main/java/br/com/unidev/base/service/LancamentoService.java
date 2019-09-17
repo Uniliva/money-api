@@ -7,8 +7,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import br.com.unidev.base.config.Messages;
-import br.com.unidev.base.exception.RecursoNaoEncontradoException;
-import br.com.unidev.base.exception.RequisicaoInvalidaException;
+import br.com.unidev.base.exception.ResourceNotFoundException;
+import br.com.unidev.base.exception.BusinessException;
+import br.com.unidev.base.exception.RequestInvalidException;
 import br.com.unidev.base.model.Categoria;
 import br.com.unidev.base.model.Lancamento;
 import br.com.unidev.base.model.Pessoa;
@@ -35,33 +36,32 @@ public class LancamentoService {
 		return findAll;
 	}
 	
-	public Lancamento salvar(Lancamento lancamento) throws RequisicaoInvalidaException {
+	public Lancamento salvar(Lancamento lancamento) throws RequestInvalidException {
 		try {
-			Integer codigoCategoria = lancamento.getCategoria().getCodigo();
-			Categoria categoria = categoriaService.buscaPorCodigo(codigoCategoria);
+			Pessoa pessoa = pessoaService.buscaPorCodigo(lancamento.getPessoa().getCodigo());
+			if(!pessoa.isAtivo()) throw new BusinessException(msg.getMessage("pessoa.inativa"));
+			lancamento.setPessoa(pessoa);
+			
+			
+			Categoria categoria = categoriaService.buscaPorCodigo(lancamento.getCategoria().getCodigo());
 			lancamento.setCategoria(categoria);
 			
-			Integer codigoPessoa = lancamento.getPessoa().getCodigo();
-			Pessoa pessoa = pessoaService.buscaPorCodigo(codigoPessoa);
-			lancamento.setPessoa(pessoa);
-
-
 		} catch (Exception ex) {
-			throw new RequisicaoInvalidaException(msg.getMessage("requisicao.invalida"),ex);
+			throw new RequestInvalidException(msg.getMessage("requisicao.invalida"),ex);
 		}		
 
 		return repo.save(lancamento);
 	}
 
-	public Lancamento buscaPorCodigo(Integer codigo) throws RecursoNaoEncontradoException {
-		return repo.findById(codigo).orElseThrow(() -> new RecursoNaoEncontradoException(msg.getMessage("recurso.nao.encontrado", "Lancamento")));
+	public Lancamento buscaPorCodigo(Integer codigo) throws ResourceNotFoundException {
+		return repo.findById(codigo).orElseThrow(() -> new ResourceNotFoundException(msg.getMessage("recurso.nao.encontrado", "Lancamento")));
 	}
 
 	public void remove(Integer codigo) {
 		repo.deleteById(codigo);
 	}
 
-	public Lancamento atualizar(Integer codigo, Lancamento lancamento) throws RecursoNaoEncontradoException {
+	public Lancamento atualizar(Integer codigo, Lancamento lancamento) throws ResourceNotFoundException {
 		Lancamento lancamentoSalva = this.buscaPorCodigo(codigo);
 		BeanUtils.copyProperties(lancamento, lancamentoSalva, "codigo");
 		return repo.save(lancamentoSalva);
