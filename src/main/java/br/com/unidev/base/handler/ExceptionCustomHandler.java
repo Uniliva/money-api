@@ -3,8 +3,8 @@ package br.com.unidev.base.handler;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -18,6 +18,8 @@ import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
 import br.com.unidev.base.config.Messages;
+import br.com.unidev.base.exception.RecursoNaoEncontradoException;
+import br.com.unidev.base.exception.RequisicaoInvalidaException;
 
 @ControllerAdvice
 public class ExceptionCustomHandler extends ResponseEntityExceptionHandler {
@@ -29,7 +31,7 @@ public class ExceptionCustomHandler extends ResponseEntityExceptionHandler {
 	protected ResponseEntity<Object> handleHttpMessageNotReadable(HttpMessageNotReadableException ex,
 			HttpHeaders headers, HttpStatus status, WebRequest request) {
 
-		String msgUsuario = msg.getMessage("body.invalido");
+		String msgUsuario = msg.getMessage("requisicao.invalida");
 		String msgDev = ex.getCause() != null ? ex.getCause().getMessage() : ex.toString();
 
 		Erro erro = new Erro(msgUsuario, msgDev, null);
@@ -58,12 +60,24 @@ public class ExceptionCustomHandler extends ResponseEntityExceptionHandler {
 		return handleExceptionInternal(ex, erro, headers, status, request);
 	}
 
-	@ExceptionHandler({ EmptyResultDataAccessException.class })
-	protected ResponseEntity<Object> handleEmptyResultDataAccessException(EmptyResultDataAccessException ex,
+	@ExceptionHandler({ RequisicaoInvalidaException.class })
+	protected ResponseEntity<Object> handleRequisicaoInvalidaException(RequisicaoInvalidaException ex,
 			WebRequest request) {
 
-		String msgUsuario = msg.getMessage("recurso.nao.encontrado");
-		String msgDev = ex.toString();
+		String msgUsuario = ex.getMessage();
+		String msgDev = ExceptionUtils.getRootCauseMessage(ex.getExceptioLancada());
+
+		Erro erro = new Erro(msgUsuario, msgDev, null);
+
+		return handleExceptionInternal(ex, erro, new HttpHeaders(), HttpStatus.BAD_REQUEST, request);
+	}
+	
+	@ExceptionHandler({ RecursoNaoEncontradoException.class })
+	protected ResponseEntity<Object> handleRecursoNaoEncontradoException(RecursoNaoEncontradoException ex,
+			WebRequest request) {
+
+		String msgUsuario = ex.getMessage();
+		String msgDev = ExceptionUtils.getRootCauseMessage(ex);
 
 		Erro erro = new Erro(msgUsuario, msgDev, null);
 

@@ -4,9 +4,10 @@ import java.util.List;
 
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 
+import br.com.unidev.base.config.Messages;
+import br.com.unidev.base.exception.RecursoNaoEncontradoException;
 import br.com.unidev.base.model.Categoria;
 import br.com.unidev.base.repository.CategoriaRepository;
 
@@ -16,6 +17,9 @@ public class CategoriaService {
 	@Autowired
 	private CategoriaRepository repo;
 	
+	@Autowired
+	private Messages msg;
+	
 	public List<Categoria> buscarTodos() {
 		return repo.findAll();
 	}
@@ -24,15 +28,15 @@ public class CategoriaService {
 		return repo.save(categoria);
 	}
 
-	public Categoria buscaPorCodigo(Integer codigo) {
-		return repo.findById(codigo).orElseThrow(() -> new EmptyResultDataAccessException(1));
+	public Categoria buscaPorCodigo(Integer codigo) throws RecursoNaoEncontradoException{
+		return repo.findById(codigo).orElseThrow(() -> new RecursoNaoEncontradoException(msg.getMessage("recurso.nao.encontrado", "Categoria")));
 	}
 
 	public void remove(Integer codigo) {
 		repo.deleteById(codigo);
 	}
 
-	public Categoria atualizar(Integer codigo, Categoria categoria) {
+	public Categoria atualizar(Integer codigo, Categoria categoria) throws RecursoNaoEncontradoException {
 		Categoria categoriaSalva = this.buscaPorCodigo(codigo);
 		BeanUtils.copyProperties(categoria, categoriaSalva, "codigo");
 		return repo.save(categoriaSalva);

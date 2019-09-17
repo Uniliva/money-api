@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import br.com.unidev.base.event.RecursoCriadoEvent;
+import br.com.unidev.base.exception.RecursoNaoEncontradoException;
 import br.com.unidev.base.model.Pessoa;
 import br.com.unidev.base.service.PessoaService;
 
@@ -47,7 +48,7 @@ public class PessoaController {
 	}
 
 	@GetMapping("/{codigo}")
-	public ResponseEntity<Pessoa> buscaPorCodigo(@PathVariable Integer codigo) {
+	public ResponseEntity<Pessoa> buscaPorCodigo(@PathVariable Integer codigo) throws RecursoNaoEncontradoException {
 		return ResponseEntity.ok(service.buscaPorCodigo(codigo));
 	}
 
@@ -58,13 +59,13 @@ public class PessoaController {
 	}
 
 	@PutMapping("/{codigo}")
-	public ResponseEntity<Pessoa> atualizar(@PathVariable Integer codigo, @Valid @RequestBody Pessoa pessoa) {
+	public ResponseEntity<Pessoa> atualizar(@PathVariable Integer codigo, @Valid @RequestBody Pessoa pessoa) throws RecursoNaoEncontradoException {
 		return ResponseEntity.ok(service.atualizar(codigo, pessoa));
 	}
 	
 	@PutMapping("/{codigo}/ativo")
 	@ResponseStatus(code = HttpStatus.NO_CONTENT)
-	public void atualizarStatus(@PathVariable Integer codigo, @RequestParam Boolean status) {
+	public void atualizarStatus(@PathVariable Integer codigo, @RequestParam Boolean status) throws RecursoNaoEncontradoException {
 		service.atualizarStatus(codigo, status);
 	}
 

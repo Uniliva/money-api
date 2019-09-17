@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import br.com.unidev.base.event.RecursoCriadoEvent;
+import br.com.unidev.base.exception.RecursoNaoEncontradoException;
 import br.com.unidev.base.model.Categoria;
 import br.com.unidev.base.service.CategoriaService;
 
@@ -47,7 +48,7 @@ public class CategoriaController {
 	}
 
 	@GetMapping("/{codigo}")
-	public ResponseEntity<Categoria> buscaPorCodigo(@PathVariable Integer codigo) {
+	public ResponseEntity<Categoria> buscaPorCodigo(@PathVariable Integer codigo) throws RecursoNaoEncontradoException {
 		return ResponseEntity.ok(service.buscaPorCodigo(codigo));
 	}
 	
@@ -58,7 +59,7 @@ public class CategoriaController {
 	}
 	
 	@PutMapping("/{codigo}")
-	public ResponseEntity<Categoria> atualizar(@PathVariable Integer codigo, @Valid @RequestBody Categoria categoria) {
+	public ResponseEntity<Categoria> atualizar(@PathVariable Integer codigo, @Valid @RequestBody Categoria categoria) throws RecursoNaoEncontradoException {
 		return ResponseEntity.ok(service.atualizar(codigo, categoria));
 	}
 
