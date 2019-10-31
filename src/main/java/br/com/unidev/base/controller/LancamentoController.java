@@ -20,9 +20,10 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import br.com.unidev.base.event.RecursoCriadoEvent;
-import br.com.unidev.base.exception.ResourceNotFoundException;
 import br.com.unidev.base.exception.RequestInvalidException;
+import br.com.unidev.base.exception.ResourceNotFoundException;
 import br.com.unidev.base.model.Lancamento;
+import br.com.unidev.base.model.LancamentoFiltro;
 import br.com.unidev.base.service.LancamentoService;
 
 @RestController
@@ -36,8 +37,8 @@ public class LancamentoController {
 	private ApplicationEventPublisher publisher;
 
 	@GetMapping
-	public List<Lancamento> listar() {
-		return service.buscarTodos();
+	public List<Lancamento> pesquisar(LancamentoFiltro filtro ) {
+		return service.buscarComFiltros(filtro);
 	}
 
 	@PostMapping

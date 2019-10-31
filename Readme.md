@@ -37,3 +37,34 @@ docker exec -it  <name-container> psql -U postgres -c "create database database_
 
 ![Conectando.png](images/dbeaver.png)
 
+---
+
+### Executando projeto
+
+- Instale as dependencias
+
+```shell
+mvn install
+```
+
+- importe no eclipse
+
+
+-- crie profiles
+
+Caso queira passar o profile que o spring deve sergui via variavel de ambiente
+- Crie uma variavel de ambiente ex  `export SPRING_PROFILES_ACTIVE=dev` e use conforme abaixo
+
+spring.profiles.active={SPRING_PROFILES_ACTIVE}
+
+![profiles.png](images/profiles.png)
+
+
+#### Maldito eclipse
+
+O eclipse, pelo que vi, não reconhece as variaveis de ambiente, para executar usando variaveis de ambiente use nas configurações de execução a aba environment para configurar a variavel
+
+
+
+![profiles.png](images/profiles-eclipse.png)
+

@@ -12,6 +12,7 @@ import br.com.unidev.base.exception.BusinessException;
 import br.com.unidev.base.exception.RequestInvalidException;
 import br.com.unidev.base.model.Categoria;
 import br.com.unidev.base.model.Lancamento;
+import br.com.unidev.base.model.LancamentoFiltro;
 import br.com.unidev.base.model.Pessoa;
 import br.com.unidev.base.repository.LancamentoRepository;
 
@@ -31,8 +32,8 @@ public class LancamentoService {
 	@Autowired
 	private Messages msg;
 	
-	public List<Lancamento> buscarTodos() {
-		List<Lancamento> findAll = repo.findAll();
+	public List<Lancamento> buscarComFiltros(LancamentoFiltro filtro) {
+		List<Lancamento> findAll = repo.buscarPorFiltro(filtro);
 		return findAll;
 	}
 	
