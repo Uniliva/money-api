@@ -4,6 +4,8 @@ import java.util.List;
 
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import br.com.unidev.base.config.Messages;
@@ -32,8 +34,8 @@ public class LancamentoService {
 	@Autowired
 	private Messages msg;
 	
-	public List<Lancamento> buscarComFiltros(LancamentoFiltro filtro) {
-		List<Lancamento> findAll = repo.buscarPorFiltro(filtro);
+	public Page<Lancamento> buscarComFiltros(LancamentoFiltro filtro, Pageable pagina) {
+		Page<Lancamento> findAll = repo.buscarPorFiltro(filtro, pagina);
 		return findAll;
 	}
 	

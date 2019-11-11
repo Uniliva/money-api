@@ -7,6 +7,8 @@ import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -37,8 +39,8 @@ public class LancamentoController {
 	private ApplicationEventPublisher publisher;
 
 	@GetMapping
-	public List<Lancamento> pesquisar(LancamentoFiltro filtro ) {
-		return service.buscarComFiltros(filtro);
+	public Page<Lancamento> pesquisar(LancamentoFiltro filtro , Pageable pagina) {
+		return service.buscarComFiltros(filtro, pagina);
 	}
 
 	@PostMapping
