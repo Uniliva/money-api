@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -70,6 +71,17 @@ public class ExceptionCustomHandler extends ResponseEntityExceptionHandler {
 		Erro erro = new Erro(msgUsuario, msgDev, null);
 
 		return handleExceptionInternal(ex, erro, new HttpHeaders(), HttpStatus.BAD_REQUEST, request);
+	}
+	
+	@ExceptionHandler({ EmptyResultDataAccessException.class })
+	protected ResponseEntity<Object> handleEmptyResultDataAccessException(EmptyResultDataAccessException ex, WebRequest request) {
+
+		String msgUsuario = msg.getMessage("recurso.nao.encontrado" , "Item");
+		String msgDev = ex.getCause() != null ? ex.getCause().getMessage() : ex.toString();
+
+		Erro erro = new Erro(msgUsuario, msgDev, null);
+		
+		return handleExceptionInternal(ex, erro, new HttpHeaders(), HttpStatus.NOT_FOUND, request);
 	}
 	
 	@ExceptionHandler({ ResourceNotFoundException.class })
