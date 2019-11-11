@@ -1,7 +1,5 @@
 package br.com.unidev.base.service;
 
-import java.util.List;
-
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -9,9 +7,9 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import br.com.unidev.base.config.Messages;
-import br.com.unidev.base.exception.ResourceNotFoundException;
 import br.com.unidev.base.exception.BusinessException;
 import br.com.unidev.base.exception.RequestInvalidException;
+import br.com.unidev.base.exception.ResourceNotFoundException;
 import br.com.unidev.base.model.Categoria;
 import br.com.unidev.base.model.Lancamento;
 import br.com.unidev.base.model.LancamentoFiltro;

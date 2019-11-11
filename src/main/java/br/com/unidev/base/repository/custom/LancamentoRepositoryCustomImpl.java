@@ -33,6 +33,7 @@ public class LancamentoRepositoryCustomImpl implements LancamentoRepositoryCusto
 		Predicate[] predicates = criarRestricoes(filtro, lancamentoQuery, builder);
 
 		criteria.where(predicates);
+		criteria.orderBy(builder.asc(lancamentoQuery.get("codigo")));
 
 		TypedQuery<Lancamento> query = manager.createQuery(criteria);
 
@@ -59,7 +60,10 @@ public class LancamentoRepositoryCustomImpl implements LancamentoRepositoryCusto
 	private void adicionarResticaoDePaginacao(TypedQuery<Lancamento> query, Pageable pagina) {
 		int paginaAtual = pagina.getPageNumber();
 		int totalRegistroPorPagina = pagina.getPageSize();
-		int primeiroRegistroDaPagina = paginaAtual * totalRegistroPorPagina;
+		int primeiroRegistroDaPagina = 0;
+
+		if (paginaAtual != 1)
+			primeiroRegistroDaPagina = totalRegistroPorPagina * (paginaAtual - 1);
 
 		query.setFirstResult(primeiroRegistroDaPagina);
 		query.setMaxResults(totalRegistroPorPagina);
