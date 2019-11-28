@@ -18,12 +18,13 @@ public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
 	@Autowired
 	public void configure(AuthenticationManagerBuilder auth) throws Exception {
 		auth.inMemoryAuthentication()
-		.withUser("admin").password("{noop}admin").roles("ROLE");
+		.withUser("admin").password("admin").roles("ROLE");
 	}
 	
 	@Override
 	public void configure(HttpSecurity http) throws Exception {
 		http.authorizeRequests()
+		.antMatchers("/categorias").permitAll()
 		.anyRequest().authenticated()
 		.and().sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
 		.and().csrf().disable();
