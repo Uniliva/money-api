@@ -63,7 +63,7 @@ public class LancamentoRepositoryCustomImpl implements LancamentoRepositoryCusto
 		int primeiroRegistroDaPagina = 0;
 
 		if (paginaAtual != 1)
-			primeiroRegistroDaPagina = totalRegistroPorPagina * (paginaAtual - 1);
+			primeiroRegistroDaPagina = totalRegistroPorPagina * paginaAtual;
 
 		query.setFirstResult(primeiroRegistroDaPagina);
 		query.setMaxResults(totalRegistroPorPagina);
