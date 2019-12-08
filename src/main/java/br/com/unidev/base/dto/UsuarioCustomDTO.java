@@ -1,15 +1,17 @@
 package br.com.unidev.base.dto;
 
+import java.util.Collection;
+
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import br.com.unidev.base.model.Usuario;
 
-import java.util.Collection;
-
 public class UsuarioCustomDTO implements UserDetails {
 
-    private String login;
+	private static final long serialVersionUID = 1L;
+	
+	private String login;
     private String senha;
 
     public UsuarioCustomDTO(Usuario usuario) {
