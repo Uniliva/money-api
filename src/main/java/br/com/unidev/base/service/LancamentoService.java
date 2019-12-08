@@ -15,6 +15,7 @@ import br.com.unidev.base.model.Lancamento;
 import br.com.unidev.base.model.LancamentoFiltro;
 import br.com.unidev.base.model.Pessoa;
 import br.com.unidev.base.repository.LancamentoRepository;
+import br.com.unidev.base.repository.projection.ResumoLancamento;
 
 @Service
 public class LancamentoService {
@@ -34,6 +35,11 @@ public class LancamentoService {
 	
 	public Page<Lancamento> buscarComFiltros(LancamentoFiltro filtro, Pageable pagina) {
 		Page<Lancamento> findAll = repo.buscarPorFiltro(filtro, pagina);
+		return findAll;
+	}
+	
+	public Page<ResumoLancamento> resumo(LancamentoFiltro filtro, Pageable pagina) {
+		Page<ResumoLancamento> findAll = repo.resumir(filtro, pagina);
 		return findAll;
 	}
 	

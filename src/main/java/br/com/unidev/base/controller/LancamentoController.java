@@ -25,6 +25,7 @@ import br.com.unidev.base.exception.RequestInvalidException;
 import br.com.unidev.base.exception.ResourceNotFoundException;
 import br.com.unidev.base.model.Lancamento;
 import br.com.unidev.base.model.LancamentoFiltro;
+import br.com.unidev.base.repository.projection.ResumoLancamento;
 import br.com.unidev.base.service.LancamentoService;
 
 @RestController
@@ -41,6 +42,12 @@ public class LancamentoController {
 	@PreAuthorize("hasRole('ROLE_PESQUISAR_LANCAMENTO')")
 	public Page<Lancamento> pesquisar(LancamentoFiltro filtro , Pageable pagina) {
 		return service.buscarComFiltros(filtro, pagina);
+	}
+	
+	@GetMapping(params = "resumo")
+	@PreAuthorize("hasRole('ROLE_PESQUISAR_LANCAMENTO')")
+	public Page<ResumoLancamento> resumo(LancamentoFiltro filtro , Pageable pagina) {
+		return service.resumo(filtro, pagina);
 	}
 
 	@PostMapping

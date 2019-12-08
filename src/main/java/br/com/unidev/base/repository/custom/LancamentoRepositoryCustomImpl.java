@@ -18,6 +18,7 @@ import org.springframework.util.StringUtils;
 
 import br.com.unidev.base.model.Lancamento;
 import br.com.unidev.base.model.LancamentoFiltro;
+import br.com.unidev.base.repository.projection.ResumoLancamento;
 
 public class LancamentoRepositoryCustomImpl implements LancamentoRepositoryCustom {
 
@@ -42,6 +43,32 @@ public class LancamentoRepositoryCustomImpl implements LancamentoRepositoryCusto
 		return new PageImpl<>(query.getResultList(), pagina, total(filtro));
 
 	}
+	
+
+	@Override
+	public Page<ResumoLancamento> resumir(LancamentoFiltro filtro, Pageable pageable) {
+		CriteriaBuilder builder = manager.getCriteriaBuilder();
+		CriteriaQuery<ResumoLancamento> criteria = builder.createQuery(ResumoLancamento.class);
+		Root<Lancamento> root = criteria.from(Lancamento.class);
+		
+		criteria.select(builder.construct(ResumoLancamento.class
+				, root.get("codigo")
+				, root.get("descricao")
+				, root.get("dataVencimento")
+				, root.get("dataPagamento")
+				, root.get("valor")
+				, root.get("tipo")
+				, root.get("categoria").get("nome")
+				, root.get("pessoa").get("nome")));
+		
+		Predicate[] predicates = criarRestricoes(filtro, root, builder);
+		criteria.where(predicates);
+		
+		TypedQuery<ResumoLancamento> query = manager.createQuery(criteria);
+		adicionarResticaoDePaginacao(query, pageable);
+
+		return new PageImpl<>(query.getResultList(), pageable, total(filtro));
+	}
 
 	private long total(LancamentoFiltro filtro) {
 		CriteriaBuilder builder = manager.getCriteriaBuilder();
@@ -57,7 +84,7 @@ public class LancamentoRepositoryCustomImpl implements LancamentoRepositoryCusto
 		return manager.createQuery(criteria).getSingleResult();
 	}
 
-	private void adicionarResticaoDePaginacao(TypedQuery<Lancamento> query, Pageable pagina) {
+	private void adicionarResticaoDePaginacao(TypedQuery<?> query, Pageable pagina) {
 		int paginaAtual = pagina.getPageNumber();
 		int totalRegistroPorPagina = pagina.getPageSize();
 		int primeiroRegistroDaPagina = 0;
@@ -81,15 +108,16 @@ public class LancamentoRepositoryCustomImpl implements LancamentoRepositoryCusto
 
 		if (!StringUtils.isEmpty(filtro.getDataLancamentoDe())) {
 			predicates.add(
-					bulder.greaterThanOrEqualTo(lancamentoQuery.get("dataVecimento"), filtro.getDataLancamentoDe()));
+					bulder.greaterThanOrEqualTo(lancamentoQuery.get("dataVencimento"), filtro.getDataLancamentoDe()));
 		}
 
 		if (!StringUtils.isEmpty(filtro.getDataLancamentoAte())) {
 			predicates
-					.add(bulder.lessThanOrEqualTo(lancamentoQuery.get("dataVecimento"), filtro.getDataLancamentoAte()));
+					.add(bulder.lessThanOrEqualTo(lancamentoQuery.get("dataVencimento"), filtro.getDataLancamentoAte()));
 		}
 
 		return predicates.toArray(new Predicate[predicates.size()]);
 	}
+
 
 }
