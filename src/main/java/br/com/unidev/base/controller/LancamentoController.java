@@ -9,6 +9,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -37,11 +38,13 @@ public class LancamentoController {
 	private ApplicationEventPublisher publisher;
 
 	@GetMapping
+	@PreAuthorize("hasRole('ROLE_PESQUISAR_LANCAMENTO')")
 	public Page<Lancamento> pesquisar(LancamentoFiltro filtro , Pageable pagina) {
 		return service.buscarComFiltros(filtro, pagina);
 	}
 
 	@PostMapping
+	@PreAuthorize("hasRole('ROLE_CADASTRAR_LANCAMENTO')")
 	public ResponseEntity<Lancamento> salvar(@Valid @RequestBody Lancamento lancamento, HttpServletResponse response) throws RequestInvalidException {
 
 		Lancamento LancamentoSalva = service.salvar(lancamento);
@@ -50,17 +53,20 @@ public class LancamentoController {
 	}
 
 	@GetMapping("/{codigo}")
+	@PreAuthorize("hasRole('ROLE_PESQUISAR_LANCAMENTO')")
 	public ResponseEntity<Lancamento> buscaPorCodigo(@PathVariable Integer codigo) throws ResourceNotFoundException {
 		return ResponseEntity.ok(service.buscaPorCodigo(codigo));
 	}
 
 	@DeleteMapping("/{codigo}")
 	@ResponseStatus(code = HttpStatus.NO_CONTENT)
+	@PreAuthorize("hasRole('ROLE_REMOVER_LANCAMENTO')")
 	public void apagarPorCodigo(@PathVariable Integer codigo) {
 		service.remove(codigo);
 	}
 
 	@PutMapping("/{codigo}")
+	@PreAuthorize("hasRole('ROLE_ATUALIZAR_LANCAMENTO')")
 	public ResponseEntity<Lancamento> atualizar(@PathVariable Integer codigo,
 			@Valid @RequestBody Lancamento lancamento) throws ResourceNotFoundException {
 		return ResponseEntity.ok(service.atualizar(codigo, lancamento));

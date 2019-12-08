@@ -15,7 +15,7 @@ public class UsuarioCustomDTO implements UserDetails {
     private String senha;
 
     public UsuarioCustomDTO(Usuario usuario) {
-        this.login = usuario.getLogin();
+        this.login = usuario.getEmail();
         this.senha = usuario.getSenha();
     }
 

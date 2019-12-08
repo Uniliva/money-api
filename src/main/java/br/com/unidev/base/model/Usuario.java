@@ -1,43 +1,32 @@
 package br.com.unidev.base.model;
 
+import java.util.List;
+
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
+import javax.persistence.FetchType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
+import javax.persistence.Table;
+
+import lombok.Data;
 
 @Entity
+@Table(name = "usuario")
+@Data
 public class Usuario {
 
     @Id
-    @GeneratedValue
-    private Long id;
-
-    private String login;
+    private Long codigo;
+    private String nome;
+    private String email;
     private String senha;
-
-    public Usuario() {
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getLogin() {
-        return login;
-    }
-
-    public void setLogin(String login) {
-        this.login = login;
-    }
-
-    public String getSenha() {
-        return senha;
-    }
-
-    public void setSenha(String senha) {
-        this.senha = senha;
-    }
+    
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JoinTable(name= "usuario_permissao", 
+    	joinColumns = @JoinColumn(name = "codigo_usuario"), 
+    	inverseJoinColumns = @JoinColumn(name= "codigo_permissao"))
+    private List<Permissao> permissoes;
+  
 }

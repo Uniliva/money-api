@@ -1,10 +1,9 @@
 package br.com.unidev.base.service;
 
 
-import java.util.ArrayList;
 import java.util.Collection;
-import java.util.List;
-import java.util.Optional;
+import java.util.HashSet;
+import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
@@ -15,6 +14,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
+import br.com.unidev.base.model.Permissao;
 import br.com.unidev.base.model.Usuario;
 import br.com.unidev.base.repository.UsuarioRepository;
 
@@ -25,14 +25,16 @@ public class CustomUserDatailsService  implements UserDetailsService {
 	private UsuarioRepository repo;
 	
 	@Override
-	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-		Usuario usuarioSalvo = Optional.of(repo.findByLogin(username)).orElseThrow(() -> new UsernameNotFoundException("Usuario não encontrado!"));
-		return new User(usuarioSalvo.getLogin(), usuarioSalvo.getSenha(), true,true,true,true, getAuthorities(usuarioSalvo));
+	public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
+		Usuario usuarioSalvo = repo.findByEmail(email).orElseThrow(() -> new UsernameNotFoundException("Usuario e/ou senha incorretos"));
+		return new User(email, usuarioSalvo.getSenha(), true,true,true,true, getAuthorities(usuarioSalvo));
 	}
 
 	private Collection<? extends GrantedAuthority> getAuthorities(Usuario usuarioSalvo) {
-		List<GrantedAuthority> authorities = new ArrayList<>();
-		authorities.add(new SimpleGrantedAuthority("ROLE_ADMIN"));
+		Set<GrantedAuthority> authorities = new HashSet<>();
+		for (Permissao permissao : usuarioSalvo.getPermissoes()) {
+			authorities.add(new SimpleGrantedAuthority(permissao.getDescricao()));			
+		}
 		return authorities;
 	}
 
