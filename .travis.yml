@@ -1,0 +1,22 @@
+language: java
+
+script:
+  - docker build -t="money-api":latest .
+
+before_deploy:
+  - echo $DOCKER_PASSWORD | docker login --username $DOCKER_USERNAME --password-stdin
+  
+deploy:
+  provider: script
+  script:
+    echo "---------| Gerando Tags para imagem!!!  |---------";
+    docker tag money-api:latest $DOCKER_USERNAME/money-api:$TRAVIS_JOB_ID;
+    docker tag money-api:latest $DOCKER_USERNAME/money-api:latest;
+    echo "---------| Enviando para o Docker HUB !!!  |---------"
+    docker push $DOCKER_USERNAME/money-api:$TRAVIS_JOB_ID;
+    docker push $DOCKER_USERNAME/money-api:latest;
+    echo "---------| Imagem enviada com sucesso para Docker HUB !!!  |---------";
+  on:
+    brach: master
+notifications:
+  email: false
