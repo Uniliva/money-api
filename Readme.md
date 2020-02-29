@@ -1,5 +1,7 @@
 ### money-api
 
+[![Build Status](https://travis-ci.com/Uniliva/money-api.svg?branch=master)](https://travis-ci.com/Uniliva/money-api)
+
 Projeto criado a partir do curso de fullstack Angular e Spring da Algaworks
 
 
