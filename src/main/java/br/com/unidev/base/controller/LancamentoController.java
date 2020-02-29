@@ -27,9 +27,12 @@ import br.com.unidev.base.model.Lancamento;
 import br.com.unidev.base.model.LancamentoFiltro;
 import br.com.unidev.base.repository.projection.ResumoLancamento;
 import br.com.unidev.base.service.LancamentoService;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 
 @RestController
 @RequestMapping("/lancamentos")
+@Api(value = "Api de Lançamentos")
 public class LancamentoController {
 
 	@Autowired
@@ -39,18 +42,21 @@ public class LancamentoController {
 	private ApplicationEventPublisher publisher;
 
 	@GetMapping
+	@ApiOperation(value = "Retorna os lançamentos deacordo com os paramentos passados")
 	@PreAuthorize("hasRole('ROLE_PESQUISAR_LANCAMENTO')")
 	public Page<Lancamento> pesquisar(LancamentoFiltro filtro , Pageable pagina) {
 		return service.buscarComFiltros(filtro, pagina);
 	}
 	
 	@GetMapping(params = "resumo")
+	@ApiOperation(value = "Retorna um resumo de um lançamento deacordo com os paramentos passados")
 	@PreAuthorize("hasRole('ROLE_PESQUISAR_LANCAMENTO')")
 	public Page<ResumoLancamento> resumo(LancamentoFiltro filtro , Pageable pagina) {
 		return service.resumo(filtro, pagina);
 	}
 
 	@PostMapping
+	@ApiOperation(value = "Salva um novo lançamento")
 	@PreAuthorize("hasRole('ROLE_CADASTRAR_LANCAMENTO')")
 	public ResponseEntity<Lancamento> salvar(@Valid @RequestBody Lancamento lancamento, HttpServletResponse response) throws RequestInvalidException {
 
@@ -60,12 +66,14 @@ public class LancamentoController {
 	}
 
 	@GetMapping("/{codigo}")
+	@ApiOperation(value = "Busca um lançamento pelo codigo")
 	@PreAuthorize("hasRole('ROLE_PESQUISAR_LANCAMENTO')")
 	public ResponseEntity<Lancamento> buscaPorCodigo(@PathVariable Integer codigo) throws ResourceNotFoundException {
 		return ResponseEntity.ok(service.buscaPorCodigo(codigo));
 	}
 
 	@DeleteMapping("/{codigo}")
+	@ApiOperation(value = "Apaga um lançamento pelo codigo")
 	@ResponseStatus(code = HttpStatus.NO_CONTENT)
 	@PreAuthorize("hasRole('ROLE_REMOVER_LANCAMENTO')")
 	public void apagarPorCodigo(@PathVariable Integer codigo) {
@@ -73,6 +81,7 @@ public class LancamentoController {
 	}
 
 	@PutMapping("/{codigo}")
+	@ApiOperation(value = "Atualiza um lançamento pelo codigo")
 	@PreAuthorize("hasRole('ROLE_ATUALIZAR_LANCAMENTO')")
 	public ResponseEntity<Lancamento> atualizar(@PathVariable Integer codigo,
 			@Valid @RequestBody Lancamento lancamento) throws ResourceNotFoundException {

@@ -25,9 +25,12 @@ import br.com.unidev.base.event.RecursoCriadoEvent;
 import br.com.unidev.base.exception.ResourceNotFoundException;
 import br.com.unidev.base.model.Pessoa;
 import br.com.unidev.base.service.PessoaService;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 
 @RestController
 @RequestMapping("/pessoas")
+@Api(value = "Api de Pessoas")
 public class PessoaController {
 
 	@Autowired
@@ -37,6 +40,7 @@ public class PessoaController {
 	private ApplicationEventPublisher publisher;
 
 	@GetMapping
+	@ApiOperation(value = "Retorna uma lista de todos as pessoas salvas")
 	@PreAuthorize("hasRole('ROLE_PESQUISAR_PESSOA')")
 	public List<Pessoa> listar() {
 		return service.buscarTodos();
@@ -44,6 +48,7 @@ public class PessoaController {
 
 	@PostMapping
 	@PreAuthorize("hasRole('ROLE_CADASTRAR_PESSOA')")
+	@ApiOperation(value = "Salva uma pessoa")
 	public ResponseEntity<Pessoa> salvar(@Valid @RequestBody Pessoa pessoa, HttpServletResponse response) {
 		Pessoa pessoaSalva = service.salvar(pessoa);
 		publisher.publishEvent(new RecursoCriadoEvent(this, response, pessoaSalva.getCodigo()));
@@ -51,12 +56,14 @@ public class PessoaController {
 	}
 
 	@GetMapping("/{codigo}")
+	@ApiOperation(value = "Busca uma pessoa pelo codigo")
 	@PreAuthorize("hasRole('ROLE_PESQUISAR_PESSOA')")
 	public ResponseEntity<Pessoa> buscaPorCodigo(@PathVariable Integer codigo) throws ResourceNotFoundException {
 		return ResponseEntity.ok(service.buscaPorCodigo(codigo));
 	}
 
 	@DeleteMapping("/{codigo}")
+	@ApiOperation(value = "Apaga uma pessoa pelo codigo")
 	@PreAuthorize("hasRole('ROLE_REMOVER_PESSOA')")
 	@ResponseStatus(code = HttpStatus.NO_CONTENT)
 	public void apagarPorCodigo(@PathVariable Integer codigo) {
@@ -64,12 +71,14 @@ public class PessoaController {
 	}
 
 	@PutMapping("/{codigo}")
+	@ApiOperation(value = "Atualiza uma pessoa pelo codigo")
 	@PreAuthorize("hasRole('ROLE_ATUALIZAR_PESSOA')")
 	public ResponseEntity<Pessoa> atualizar(@PathVariable Integer codigo, @Valid @RequestBody Pessoa pessoa) throws ResourceNotFoundException {
 		return ResponseEntity.ok(service.atualizar(codigo, pessoa));
 	}
 	
 	@PutMapping("/{codigo}/ativo")
+	@ApiOperation(value = "Atualiza o status de uma pessoa pelo codigo")
 	@PreAuthorize("hasRole('ROLE_ATUALIZAR_PESSOA')")
 	@ResponseStatus(code = HttpStatus.NO_CONTENT)
 	public void atualizarStatus(@PathVariable Integer codigo, @RequestParam Boolean status) throws ResourceNotFoundException {
