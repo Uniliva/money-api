@@ -25,7 +25,6 @@ import br.com.unidev.base.event.RecursoCriadoEvent;
 import br.com.unidev.base.exception.ResourceNotFoundException;
 import br.com.unidev.base.model.Pessoa;
 import br.com.unidev.base.service.PessoaService;
-import io.swagger.annotations.ApiOperation;
 
 @RestController
 @RequestMapping("/pessoas")
@@ -44,7 +43,6 @@ public class PessoaController {
 	}
 
 	@PostMapping
-	@ApiOperation(value = "Salva uma pessoa")
 	public ResponseEntity<Pessoa> salvar(@Valid @RequestBody Pessoa pessoa, HttpServletResponse response) {
 		Pessoa pessoaSalva = service.salvar(pessoa);
 		publisher.publishEvent(new RecursoCriadoEvent(this, response, pessoaSalva.getCodigo()));
