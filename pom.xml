@@ -9,7 +9,7 @@
 		<version>2.1.7.RELEASE</version>
 		<relativePath />
 	</parent>
-	
+
 	<groupId>br.com.unidev.base</groupId>
 	<artifactId>money-api</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
@@ -81,11 +81,6 @@
 			<groupId>org.springframework.security</groupId>
 			<artifactId>spring-security-jwt</artifactId>
 			<version>${jwt.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>io.springfox</groupId>
-			<artifactId>springfox-swagger2</artifactId>
-			<version>2.9.2</version>
 		</dependency>
 	</dependencies>
 	<build>

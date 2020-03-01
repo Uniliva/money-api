@@ -24,11 +24,8 @@ import br.com.unidev.base.event.RecursoCriadoEvent;
 import br.com.unidev.base.exception.ResourceNotFoundException;
 import br.com.unidev.base.model.Categoria;
 import br.com.unidev.base.service.CategoriaService;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
 
 @RestController
-@Api(value = "Api de Categorias")
 @RequestMapping("/categorias")
 public class CategoriaController {
 
@@ -40,14 +37,12 @@ public class CategoriaController {
 	private ApplicationEventPublisher publisher;
 
 	@GetMapping
-	@ApiOperation(value = "Retorna uma lista de todos as categorias salvas")
 	@PreAuthorize("hasRole('ROLE_PESQUISAR_CATEGORIA')")
 	public List<Categoria> listar() {
 		return service.buscarTodos();
 	}
 	
 	@PostMapping
-	@ApiOperation(value = "Sava uma categoria")
 	@PreAuthorize("hasRole('ROLE_CADASTRAR_CATEGORIA')")
 	public ResponseEntity<Categoria> salvar(@Valid @RequestBody Categoria categoria, HttpServletResponse response) {
 		Categoria categoriaSalva = service.salvar(categoria);	
@@ -56,14 +51,12 @@ public class CategoriaController {
 	}
 
 	@GetMapping("/{codigo}")
-	@ApiOperation(value = "Busca uma categoria pelo codigo")
 	@PreAuthorize("hasRole('ROLE_PESQUISAR_CATEGORIA')")
 	public ResponseEntity<Categoria> buscaPorCodigo(@PathVariable Integer codigo) throws ResourceNotFoundException {
 		return ResponseEntity.ok(service.buscaPorCodigo(codigo));
 	}
 	
 	@DeleteMapping("/{codigo}")
-	@ApiOperation(value = "Remove uma categoria pelo codigo")
 	@ResponseStatus(code = HttpStatus.NO_CONTENT)
 	@PreAuthorize("hasRole('ROLE_REMOVER_CATEGORIA')")
 	public void apagarPorCodigo(@PathVariable Integer codigo) {
@@ -71,7 +64,6 @@ public class CategoriaController {
 	}
 	
 	@PutMapping("/{codigo}")
-	@ApiOperation(value = "Atualiza uma categoria pelo codigo")
 	@PreAuthorize("hasRole('ROLE_ATUALIZAR_CATEGORIA')")
 	public ResponseEntity<Categoria> atualizar(@PathVariable Integer codigo, @Valid @RequestBody Categoria categoria) throws ResourceNotFoundException {
 		return ResponseEntity.ok(service.atualizar(codigo, categoria));
