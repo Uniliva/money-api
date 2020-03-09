@@ -18,8 +18,8 @@ CREATE TABLE usuario_permissao (
 	FOREIGN KEY (codigo_permissao) REFERENCES permissao(codigo)
 );
 
-INSERT INTO usuario (codigo, nome, email, senha) values (1, 'Administrador', 'admin@umoney.com', '$2y$12$CQHhwSzJRikf60tcZJdt2eajJbmaS6oADbuvET28IckgsZbiBZz3O');
-INSERT INTO usuario (codigo, nome, email, senha) values (2, 'Maria Silva', 'maria@umoney.com', '$2y$12$CQHhwSzJRikf60tcZJdt2eajJbmaS6oADbuvET28IckgsZbiBZz3O');
+INSERT INTO usuario (codigo, nome, email, senha) values (1, 'Administrador', 'admin@umoney.com', '$2a$10$sS2Tbt.bAyhiEj28ExTbf.metmgp37K5iuj8/mtR4xnVI5oYotjf.');
+INSERT INTO usuario (codigo, nome, email, senha) values (2, 'Maria Silva', 'maria@umoney.com', '$2a$10$sS2Tbt.bAyhiEj28ExTbf.metmgp37K5iuj8/mtR4xnVI5oYotjf.');
 
 INSERT INTO permissao (codigo, descricao) values (1, 'ROLE_CADASTRAR_CATEGORIA');
 INSERT INTO permissao (codigo, descricao) values (2, 'ROLE_PESQUISAR_CATEGORIA');
