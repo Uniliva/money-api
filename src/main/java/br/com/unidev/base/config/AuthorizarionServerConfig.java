@@ -19,8 +19,8 @@ import br.com.unidev.base.service.CustomUserDatailsService;
 public class AuthorizarionServerConfig extends AuthorizationServerConfigurerAdapter {
 	
 
-	private static final int ACCESS_TOKEN_VALIDITY_IN_SECONDS = 5;// 60 * 60 * 24;
-	private static final int REFRESH_TOKEN_VALIDITY_IN_SECONDS = 5;// 60 * 60 * 24 * 30;
+	private static final int ACCESS_TOKEN_VALIDITY_IN_SECONDS = 60 * 60 * 24;
+	private static final int REFRESH_TOKEN_VALIDITY_IN_SECONDS = 60 * 60 * 24 * 30;
 
 	@Autowired
 	private AuthenticationManager authenticationManager;
